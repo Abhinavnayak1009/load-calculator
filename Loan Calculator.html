@@ -1,0 +1,1441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Loan Data Entry & Excel Export Tool</title>
+  <style>
+    /* ===== PERPLEXITY DESIGN SYSTEM (TRIMMED TO ESSENTIALS) ===== */
+    :root {
+      --color-white: rgba(255, 255, 255, 1);
+      --color-cream-50: rgba(252, 252, 249, 1);
+      --color-cream-100: rgba(255, 255, 253, 1);
+      --color-gray-200: rgba(245, 245, 245, 1);
+      --color-gray-300: rgba(167, 169, 169, 1);
+      --color-gray-400: rgba(119, 124, 124, 1);
+      --color-slate-500: rgba(98, 108, 113, 1);
+      --color-brown-600: rgba(94, 82, 64, 1);
+      --color-charcoal-700: rgba(31, 33, 33, 1);
+      --color-charcoal-800: rgba(38, 40, 40, 1);
+      --color-slate-900: rgba(19, 52, 59, 1);
+      --color-teal-300: rgba(50, 184, 198, 1);
+      --color-teal-400: rgba(45, 166, 178, 1);
+      --color-teal-500: rgba(33, 128, 141, 1);
+      --color-teal-600: rgba(29, 116, 128, 1);
+      --color-teal-700: rgba(26, 104, 115, 1);
+      --color-teal-800: rgba(41, 150, 161, 1);
+      --color-red-400: rgba(255, 84, 89, 1);
+      --color-red-500: rgba(192, 21, 47, 1);
+      --color-orange-400: rgba(230, 129, 97, 1);
+      --color-orange-500: rgba(168, 75, 47, 1);
+
+      --color-brown-600-rgb: 94, 82, 64;
+      --color-teal-500-rgb: 33, 128, 141;
+      --color-slate-900-rgb: 19, 52, 59;
+      --color-slate-500-rgb: 98, 108, 113;
+      --color-red-500-rgb: 192, 21, 47;
+      --color-red-400-rgb: 255, 84, 89;
+      --color-orange-500-rgb: 168, 75, 47;
+      --color-orange-400-rgb: 230, 129, 97;
+
+      --color-background: var(--color-cream-50);
+      --color-surface: var(--color-cream-100);
+      --color-text: var(--color-slate-900);
+      --color-text-secondary: var(--color-slate-500);
+      --color-primary: var(--color-teal-500);
+      --color-primary-hover: var(--color-teal-600);
+      --color-primary-active: var(--color-teal-700);
+      --color-secondary: rgba(var(--color-brown-600-rgb), 0.12);
+      --color-secondary-hover: rgba(var(--color-brown-600-rgb), 0.2);
+      --color-secondary-active: rgba(var(--color-brown-600-rgb), 0.25);
+      --color-border: rgba(var(--color-brown-600-rgb), 0.2);
+      --color-btn-primary-text: var(--color-cream-50);
+      --color-card-border: rgba(var(--color-brown-600-rgb), 0.12);
+      --color-card-border-inner: rgba(var(--color-brown-600-rgb), 0.12);
+      --color-error: var(--color-red-500);
+      --color-success: var(--color-teal-500);
+      --color-warning: var(--color-orange-500);
+      --color-info: var(--color-slate-500);
+      --color-focus-ring: rgba(var(--color-teal-500-rgb), 0.4);
+
+      --font-family-base: "FKGroteskNeue", -apple-system, BlinkMacSystemFont,
+        "Segoe UI", Roboto, sans-serif;
+      --font-family-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+        monospace;
+      --font-size-sm: 12px;
+      --font-size-base: 14px;
+      --font-size-lg: 16px;
+      --font-size-2xl: 20px;
+      --font-size-3xl: 24px;
+
+      --space-4: 4px;
+      --space-8: 8px;
+      --space-12: 12px;
+      --space-16: 16px;
+      --space-20: 20px;
+      --space-24: 24px;
+
+      --radius-sm: 6px;
+      --radius-base: 8px;
+      --radius-lg: 12px;
+
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04),
+        0 1px 2px rgba(0, 0, 0, 0.02);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.04),
+        0 2px 4px -1px rgba(0, 0, 0, 0.02);
+
+      --duration-fast: 150ms;
+      --duration-normal: 250ms;
+      --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+
+      --focus-outline: 2px solid var(--color-primary);
+      --focus-ring: 0 0 0 3px var(--color-focus-ring);
+    }
+
+    @font-face {
+      font-family: "FKGroteskNeue";
+      src: url("https://r2cdn.perplexity.ai/fonts/FKGroteskNeue.woff2")
+        format("woff2");
+    }
+
+    html {
+      font-size: var(--font-size-base);
+      font-family: var(--font-family-base);
+      line-height: 1.5;
+      color: var(--color-text);
+      background-color: var(--color-background);
+      -webkit-font-smoothing: antialiased;
+      box-sizing: border-box;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: inherit;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(
+          circle at top left,
+          rgba(33, 128, 141, 0.08),
+          transparent 55%
+        ),
+        radial-gradient(
+          circle at bottom right,
+          rgba(94, 82, 64, 0.12),
+          transparent 55%
+        ),
+        var(--color-background);
+      min-height: 100vh;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    h1 {
+      font-size: var(--font-size-3xl);
+    }
+
+    h2 {
+      font-size: var(--font-size-2xl);
+    }
+
+    p {
+      margin: 0 0 var(--space-12) 0;
+      color: var(--color-text-secondary);
+      font-size: var(--font-size-sm);
+    }
+
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 24px 16px 32px;
+    }
+
+    .app-shell {
+      background-color: var(--color-surface);
+      border-radius: 16px;
+      border: 1px solid var(--color-card-border);
+      box-shadow: var(--shadow-md);
+      padding: 20px;
+    }
+
+    .app-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .app-title {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      background-color: rgba(33, 128, 141, 0.08);
+      color: var(--color-primary);
+      border: 1px solid rgba(33, 128, 141, 0.25);
+      gap: 4px;
+    }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background-color: var(--color-primary);
+    }
+
+    .app-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 14px;
+      border-radius: var(--radius-base);
+      font-size: var(--font-size-sm);
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      transition: all var(--duration-normal) var(--ease-standard);
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background-color: var(--color-primary);
+      color: var(--color-btn-primary-text);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--color-primary-hover);
+      transform: translateY(-0.5px);
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
+    }
+
+    .btn-secondary {
+      background-color: var(--color-secondary);
+      color: var(--color-text);
+      border: 1px solid var(--color-border);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--color-secondary-hover);
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .main-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.95fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 880px) {
+      .main-layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .card {
+      background-color: var(--color-surface);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--color-card-border);
+      box-shadow: var(--shadow-sm);
+      padding: var(--space-16);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .card-header h3 {
+      font-size: var(--font-size-lg);
+    }
+
+    .card-header span {
+      font-size: 11px;
+      color: var(--color-text-secondary);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px 14px;
+    }
+
+    @media (max-width: 640px) {
+      .form-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    label {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--color-text-secondary);
+    }
+
+    .required::after {
+      content: " *";
+      color: var(--color-error);
+    }
+
+    input,
+    select {
+      font-family: var(--font-family-base);
+      font-size: var(--font-size-sm);
+      padding: 7px 9px;
+      border-radius: var(--radius-base);
+      border: 1px solid var(--color-border);
+      background-color: var(--color-white);
+      color: var(--color-text);
+      outline: none;
+      transition: border-color var(--duration-fast) var(--ease-standard),
+        box-shadow var(--duration-fast) var(--ease-standard),
+        background-color var(--duration-fast) var(--ease-standard);
+    }
+
+    input:focus,
+    select:focus {
+      border-color: var(--color-primary);
+      box-shadow: var(--focus-ring);
+      background-color: var(--color-white);
+    }
+
+    input::placeholder {
+      color: rgba(var(--color-slate-500-rgb), 0.6);
+    }
+
+    .input-inline {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .input-inline span {
+      font-size: 11px;
+      color: var(--color-text-secondary);
+    }
+
+    .help-text {
+      font-size: 10px;
+      color: var(--color-text-secondary);
+      margin-top: 2px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background-color: rgba(98, 108, 113, 0.08);
+      color: var(--color-text-secondary);
+      font-size: 10px;
+      gap: 4px;
+    }
+
+    .pill code {
+      background: none;
+      padding: 0;
+      font-family: var(--font-family-mono);
+      font-size: 10px;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 640px) {
+      .summary-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .summary-item {
+      border-radius: 10px;
+      border: 1px dashed rgba(94, 82, 64, 0.2);
+      padding: 8px 10px;
+      background: linear-gradient(
+        135deg,
+        rgba(252, 252, 249, 0.9),
+        rgba(245, 245, 245, 0.9)
+      );
+    }
+
+    .summary-label {
+      font-size: 10px;
+      color: var(--color-text-secondary);
+      margin-bottom: 2px;
+    }
+
+    .summary-value {
+      font-family: var(--font-family-mono);
+      font-size: 12px;
+      color: var(--color-slate-900);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .summary-value span.highlight {
+      color: var(--color-primary);
+      font-weight: 600;
+    }
+
+    .summary-value span.muted {
+      color: var(--color-text-secondary);
+    }
+
+    .status-bar {
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .status-text {
+      font-size: 11px;
+      color: var(--color-text-secondary);
+    }
+
+    .status-text span {
+      font-weight: 500;
+      color: var(--color-primary);
+    }
+
+    .status-error {
+      color: var(--color-error);
+    }
+
+    .status-ok {
+      color: var(--color-success);
+    }
+
+    .table-wrapper {
+      margin-top: 10px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--color-card-border);
+      background-color: rgba(255, 255, 255, 0.9);
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+    }
+
+    thead {
+      background: linear-gradient(
+        90deg,
+        rgba(33, 128, 141, 0.08),
+        rgba(94, 82, 64, 0.08)
+      );
+    }
+
+    th,
+    td {
+      padding: 6px 8px;
+      border-bottom: 1px solid var(--color-card-border-inner);
+      text-align: left;
+    }
+
+    th {
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      white-space: nowrap;
+    }
+
+    tbody tr:nth-child(even) {
+      background-color: rgba(245, 245, 245, 0.7);
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .mono {
+      font-family: var(--font-family-mono);
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 1px 6px;
+      border-radius: 999px;
+      font-size: 10px;
+      border: 1px solid rgba(98, 108, 113, 0.25);
+      color: var(--color-text-secondary);
+      gap: 4px;
+      background-color: rgba(98, 108, 113, 0.04);
+    }
+
+    .tag-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 999px;
+      background-color: rgba(98, 108, 113, 0.8);
+    }
+
+    .alert {
+      margin-top: 8px;
+      padding: 6px 8px;
+      border-radius: 8px;
+      font-size: 11px;
+      border: 1px solid rgba(192, 21, 47, 0.25);
+      background-color: rgba(255, 84, 89, 0.06);
+      color: var(--color-error);
+      display: none;
+    }
+
+    .alert.visible {
+      display: block;
+    }
+
+    .small-note {
+      font-size: 10px;
+      color: var(--color-text-secondary);
+      margin-top: 6px;
+    }
+
+    @media (max-width: 480px) {
+      .app-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .app-actions {
+        width: 100%;
+      }
+
+      .btn {
+        flex: 1;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="app-shell" aria-label="Loan Data Entry and Excel Export Tool">
+      <header class="app-header">
+        <div class="app-title">
+          <div class="badge">
+            <span class="badge-dot"></span>
+            Loan Calculator · Form View
+          </div>
+          <h1>Loan Data Entry &amp; Excel Export</h1>
+          <p>
+            Enter one record at a time in form view. Calculations, display format
+            and export follow your exact rules (2 decimal truncation, combined
+            fields, insurance logic).
+          </p>
+        </div>
+        <div class="app-actions">
+          <button id="addRecordBtn" class="btn btn-primary">
+            ➕ Add Record
+          </button>
+          <button id="exportCsvBtn" class="btn btn-secondary" disabled>
+            ⬇️ Export as Excel (CSV)
+          </button>
+        </div>
+      </header>
+
+      <main class="main-layout">
+        <!-- LEFT: INPUT FORM -->
+        <section class="card" aria-label="Input Form">
+          <div class="card-header">
+            <h3>Input Record (Form View)</h3>
+            <span>All calculations are automatic</span>
+          </div>
+
+          <form id="loanForm" autocomplete="off">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="sampleRecord" class="required"
+                  >Sample No / Record No</label
+                >
+                <input
+                  id="sampleRecord"
+                  name="sampleRecord"
+                  type="text"
+                  placeholder="e.g. S-001 / R-001"
+                  required
+                />
+                <div class="help-text">Will be copied as column 1.</div>
+              </div>
+
+              <div class="form-group">
+                <label for="customerRef" class="required"
+                  >Customer Reference Number</label
+                >
+                <input
+                  id="customerRef"
+                  name="customerRef"
+                  type="text"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="customerName" class="required">Customer Name</label>
+                <input
+                  id="customerName"
+                  name="customerName"
+                  type="text"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="cityState" class="required"
+                  >City, State (one field)</label
+                >
+                <input
+                  id="cityState"
+                  name="cityState"
+                  type="text"
+                  placeholder="e.g. Mumbai, Maharashtra"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="totalAmountImage" class="required"
+                  >Total Amount In Image</label
+                >
+                <div class="input-inline">
+                  <span>$</span>
+                  <input
+                    id="totalAmountImage"
+                    name="totalAmountImage"
+                    type="number"
+                    step="0.0000001"
+                    min="0"
+                    required
+                  />
+                </div>
+                <div class="help-text">
+                  Raw amount from image (decimals will be truncated to 2 digits
+                  internally, never rounded).
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="purchaseReductionRate" class="required"
+                  >Purchase Reduction Rate (%)</label
+                >
+                <div class="input-inline">
+                  <input
+                    id="purchaseReductionRate"
+                    name="purchaseReductionRate"
+                    type="number"
+                    step="0.0001"
+                    min="0"
+                    required
+                  />
+                  <span>%</span>
+                </div>
+                <div class="help-text">
+                  Example: 12.57 for 12.57% (used for Purchase Value).
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="downPaymentPercent" class="required"
+                  >Down Payment (%)</label
+                >
+                <div class="input-inline">
+                  <input
+                    id="downPaymentPercent"
+                    name="downPaymentPercent"
+                    type="number"
+                    step="0.0001"
+                    min="0"
+                    max="100"
+                    required
+                  />
+                  <span>%</span>
+                </div>
+                <div class="help-text">
+                  Down payment percent (used in several calculations).
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="loanPeriod" class="required"
+                  >Loan Period (Years)</label
+                >
+                <input
+                  id="loanPeriod"
+                  name="loanPeriod"
+                  type="number"
+                  min="1"
+                  max="30"
+                  step="1"
+                  required
+                />
+                <div class="help-text">
+                  Used for principal and insurance (1–30 years).
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="annuityInterest" class="required"
+                  >Annuity Interest Rate (% per annum)</label
+                >
+                <div class="input-inline">
+                  <input
+                    id="annuityInterest"
+                    name="annuityInterest"
+                    type="number"
+                    step="0.0001"
+                    min="0"
+                    required
+                  />
+                  <span>%</span>
+                </div>
+                <div class="help-text">
+                  Used for Total Interest for loan period.
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="monthlyPrincipalReductionPercent" class="required"
+                  >Monthly Principal Reduction (%)</label
+                >
+                <div class="input-inline">
+                  <input
+                    id="monthlyPrincipalReductionPercent"
+                    name="monthlyPrincipalReductionPercent"
+                    type="number"
+                    step="0.0001"
+                    min="0"
+                    required
+                  />
+                  <span>%</span>
+                </div>
+                <div class="help-text">
+                  From image (e.g. 4.46%). Used after Monthly Principal.
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="totalInterestReductionPercent" class="required"
+                  >Total Interest Reduction (%)</label
+                >
+                <div class="input-inline">
+                  <input
+                    id="totalInterestReductionPercent"
+                    name="totalInterestReductionPercent"
+                    type="number"
+                    step="0.0001"
+                    min="0"
+                    required
+                  />
+                  <span>%</span>
+                </div>
+                <div class="help-text">
+                  From image (e.g. 12.81%). Applied on total interest.
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="guarantorName">Guarantor Name</label>
+                <input
+                  id="guarantorName"
+                  name="guarantorName"
+                  type="text"
+                  placeholder="Optional"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="guarantorRef">Guarantor Reference Number</label>
+                <input
+                  id="guarantorRef"
+                  name="guarantorRef"
+                  type="text"
+                  placeholder="Optional"
+                />
+              </div>
+            </div>
+
+            <div class="small-note">
+              <span class="pill">
+                <span>Note</span>
+                <code>All decimals are truncated to exactly 2 digits (no rounding).</code>
+              </span>
+            </div>
+
+            <div id="errorBox" class="alert"></div>
+
+            <div class="status-bar">
+              <div class="status-text">
+                Status:
+                <span id="statusLabel">Waiting for input…</span>
+              </div>
+              <button type="button" class="btn btn-secondary" id="clearFormBtn">
+                Reset Form
+              </button>
+            </div>
+          </form>
+        </section>
+
+        <!-- RIGHT: LIVE CALC SUMMARY + TABLE -->
+        <section>
+          <div class="card" aria-label="Live Calculation Preview">
+            <div class="card-header">
+              <h3>Live Preview &amp; Excel Format</h3>
+              <span>Values shown exactly as they will go into Excel</span>
+            </div>
+
+            <div class="summary-grid" id="summaryGrid">
+              <div class="summary-item">
+                <div class="summary-label">
+                  Purchase Value and Down Payment (Excel Column 5)
+                </div>
+                <div class="summary-value" id="summaryPurchaseValue">
+                  —
+                </div>
+              </div>
+
+              <div class="summary-item">
+                <div class="summary-label">
+                  Loan Period and Annuity Interest (Excel Column 6)
+                </div>
+                <div class="summary-value" id="summaryLoanPeriod">
+                  —
+                </div>
+              </div>
+
+              <div class="summary-item">
+                <div class="summary-label">
+                  Loan Amount and Principal (Excel Column 9)
+                </div>
+                <div class="summary-value" id="summaryLoanAmount">
+                  —
+                </div>
+              </div>
+
+              <div class="summary-item">
+                <div class="summary-label">
+                  Total Interest &amp; Property Insurance (Excel Column 10)
+                </div>
+                <div class="summary-value" id="summaryTotalInterest">
+                  —
+                </div>
+              </div>
+            </div>
+
+            <div class="small-note">
+              <span class="tag">
+                <span class="tag-dot"></span>
+                Excel text format examples:
+                <code>$ 7 , 181 , 179.81 and 14 %</code>,
+                <code>$ 1 , 005 , 365.18 and $ 3 , 638.35</code>
+              </span>
+            </div>
+          </div>
+
+          <div class="table-wrapper" aria-label="Recorded Rows for Export">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Sample/Record</th>
+                  <th>Customer Ref</th>
+                  <th>Customer Name</th>
+                  <th>City, State</th>
+                  <th>Purchase &amp; Down</th>
+                  <th>Loan Period &amp; Annuity</th>
+                  <th>Guarantor</th>
+                  <th>Guarantor Ref</th>
+                  <th>Loan &amp; Principal</th>
+                  <th>Total Interest &amp; Insurance</th>
+                </tr>
+              </thead>
+              <tbody id="recordsBody">
+                <tr>
+                  <td colspan="11" style="text-align:center; color: rgba(98,108,113,0.8); padding:10px;">
+                    No records yet. Fill the form and click <strong>Add Record</strong>.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="small-note">
+            Export button creates a CSV file. Open it in Excel – each column
+            matches your required 10-column layout.
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    // ===== Utility functions for truncation and formatting =====
+
+    // Truncate to exactly 2 decimals (no rounding)
+    function truncate2(value) {
+      if (!isFinite(value)) return 0;
+      const factor = 100;
+      return Math.trunc(Number(value) * factor) / factor;
+    }
+
+    // Format number as plain with 2 decimals (no commas)
+    function formatPlain2(value) {
+      return truncate2(value).toFixed(2);
+    }
+
+    // Format like "$ 7 , 181 , 179.81" (Indian-like with simple thousands)
+    function formatMoneyWithSpaces(value) {
+      const num = truncate2(value);
+      const parts = num.toFixed(2).split(".");
+      let intPart = parts[0];
+      const decPart = parts[1];
+
+      // Basic grouping in thousands (international style)
+      const sign = intPart.startsWith("-") ? "-" : "";
+      intPart = intPart.replace("-", "");
+
+      const groups = [];
+      while (intPart.length > 3) {
+        groups.unshift(intPart.slice(-3));
+        intPart = intPart.slice(0, -3);
+      }
+      if (intPart.length) groups.unshift(intPart);
+
+      const spacedInt =
+        groups
+          .map((g, index) => {
+            if (index === 0) {
+              return g; // first group as is (can include leading zeros like 005)
+            }
+            return g.padStart(3, "0");
+          })
+          .join(" , ");
+
+      return (
+        "$ " +
+        sign +
+        spacedInt +
+        "." +
+        decPart
+      );
+    }
+
+    // Format percentage value with pattern "14 %" or "4.46 %"
+    function formatPercentWithSpaces(value) {
+      const v = truncate2(value);
+      return v.toString().replace(/\\B(?=(\\d{3})+(?!\\d))/g, ",") + " %";
+    }
+
+    // Combine money and percent as required
+    function formatPurchaseAndDown(purchaseValue, downPercent) {
+      // Example: "$ 7 , 181 , 179.81 and 14 %"
+      const moneyStr = formatMoneyWithSpaces(purchaseValue);
+      const percentStr = truncate2(downPercent) + " %";
+      // spaces exactly: " and "
+      return moneyStr + " and " + percentStr;
+    }
+
+    function formatLoanAndPrincipal(loanAmount, principal) {
+      // Example: "$ 1 , 005 , 365.18 and $ 3 , 638.35"
+      const loanStr = formatMoneyWithSpaces(loanAmount);
+      const principalStr = formatMoneyWithSpaces(principal);
+      return loanStr + " and " + principalStr;
+    }
+
+    function formatTotalInterestAndInsurance(totalInterest, insurancePerMonth) {
+      // Example: "$ 1 , 079 , 943.97 and 343.49"
+      const interestStr = formatMoneyWithSpaces(totalInterest);
+      const insuranceStr = formatPlain2(insurancePerMonth);
+      return interestStr + " and " + insuranceStr;
+    }
+
+    function formatLoanPeriodAndAnnuity(loanYears, annuityPercent) {
+      // Keep a clear simple format, e.g. "22 years and 5.60 %"
+      const lp = parseInt(loanYears, 10);
+      const rate = truncate2(annuityPercent).toFixed(2);
+      return lp + " years and " + rate + " %";
+    }
+
+    // Simple CSV escape (double quotes around each field, escaping internal quotes)
+    function csvEscape(field) {
+      const str = String(field ?? "");
+      const safe = str.replace(/"/g, '""');
+      return '"' + safe + '"';
+    }
+
+    // ===== Calculation logic according to your spec =====
+
+    function calculateAll(input) {
+      const errors = [];
+
+      const totalAmountImage = Number(input.totalAmountImage);
+      const purchaseReductionRate = Number(input.purchaseReductionRate);
+      const downPaymentPercent = Number(input.downPaymentPercent);
+      const loanPeriodYears = Number(input.loanPeriodYears);
+      const annuityInterestPercent = Number(input.annuityInterestPercent);
+      const monthlyPrincipalReductionPercent = Number(
+        input.monthlyPrincipalReductionPercent
+      );
+      const totalInterestReductionPercent = Number(
+        input.totalInterestReductionPercent
+      );
+
+      if (!isFinite(totalAmountImage) || totalAmountImage <= 0) {
+        errors.push("Total Amount In Image must be a positive number.");
+      }
+      if (!isFinite(purchaseReductionRate) || purchaseReductionRate < 0) {
+        errors.push("Purchase Reduction Rate must be a valid percentage.");
+      }
+      if (
+        !isFinite(downPaymentPercent) ||
+        downPaymentPercent < 0 ||
+        downPaymentPercent > 100
+      ) {
+        errors.push("Down Payment must be between 0 and 100%.");
+      }
+      if (
+        !Number.isInteger(loanPeriodYears) ||
+        loanPeriodYears < 1 ||
+        loanPeriodYears > 30
+      ) {
+        errors.push("Loan Period must be an integer between 1 and 30 years.");
+      }
+      if (!isFinite(annuityInterestPercent) || annuityInterestPercent < 0) {
+        errors.push("Annuity Interest Rate must be a valid percentage.");
+      }
+      if (
+        !isFinite(monthlyPrincipalReductionPercent) ||
+        monthlyPrincipalReductionPercent < 0
+      ) {
+        errors.push("Monthly Principal Reduction must be a valid percentage.");
+      }
+      if (
+        !isFinite(totalInterestReductionPercent) ||
+        totalInterestReductionPercent < 0
+      ) {
+        errors.push("Total Interest Reduction must be a valid percentage.");
+      }
+
+      if (errors.length) {
+        return { ok: false, errors };
+      }
+
+      // 1) Purchase Value
+      // Purchase Value = Total Amount In Image * Purchase Reduction Rate %
+      const purchaseValueRaw =
+        totalAmountImage * (purchaseReductionRate / 100.0);
+      const purchaseValue = truncate2(purchaseValueRaw);
+
+      // 2) Down payment value
+      const downPaymentValueRaw = purchaseValue * (downPaymentPercent / 100.0);
+      const downPaymentValue = truncate2(downPaymentValueRaw);
+
+      // 3) Loan amount
+      // Based on your example, Loan amount = Purchase Value * Down Payment %
+      const loanAmountRaw = purchaseValue * (downPaymentPercent / 100.0);
+      const loanAmount = truncate2(loanAmountRaw);
+
+      // 4) Principal calculation
+      // Annual principal = Loan amount / Loan period
+      const annualPrincipalRaw = loanAmount / loanPeriodYears;
+      const annualPrincipal = truncate2(annualPrincipalRaw);
+
+      // Monthly principal = Annual principal / 12
+      const monthlyPrincipalRaw = annualPrincipal / 12.0;
+      const monthlyPrincipal = truncate2(monthlyPrincipalRaw);
+
+      // Reduced principal = Monthly principal - Reduction percentage
+      const reducedPrincipalRaw =
+        monthlyPrincipal *
+        (1.0 - monthlyPrincipalReductionPercent / 100.0);
+      const reducedPrincipal = truncate2(reducedPrincipalRaw);
+
+      // 5) Total Interest
+      // Per annum interest = Loan amount * Annual interest rate
+      const perAnnumInterestRaw =
+        loanAmount * (annuityInterestPercent / 100.0);
+      const perAnnumInterest = truncate2(perAnnumInterestRaw);
+
+      // Total interest for loan period without reduction
+      const totalInterestWithoutReductionRaw =
+        perAnnumInterest * loanPeriodYears;
+      const totalInterestWithoutReduction = truncate2(
+        totalInterestWithoutReductionRaw
+      );
+
+      // Total interest for loan period with reduction
+      const totalInterestWithReductionRaw =
+        totalInterestWithoutReduction *
+        (1.0 - totalInterestReductionPercent / 100.0);
+      const totalInterestWithReduction = truncate2(
+        totalInterestWithReductionRaw
+      );
+
+      // 6) Property Insurance per month
+      // Loan percentage = 100 - downPaymentPercent
+      const loanPercent = 100.0 - downPaymentPercent;
+      let insuranceRate = null;
+      let insuranceNote = "";
+
+      if (loanPercent > 95.01) {
+        insuranceNote = "Loan % above 95.01 – Insurance NA";
+      } else {
+        if (loanPercent >= 70 && loanPercent <= 80.99) {
+          if (loanPeriodYears >= 1 && loanPeriodYears <= 25) {
+            insuranceRate = 0.32;
+          } else if (loanPeriodYears >= 26 && loanPeriodYears <= 30) {
+            insuranceRate = 0.32;
+          }
+        } else if (loanPercent === 81) {
+          if (loanPeriodYears >= 1 && loanPeriodYears <= 25) {
+            insuranceRate = 0.21;
+          } else if (loanPeriodYears >= 26 && loanPeriodYears <= 30) {
+            insuranceRate = 0.32;
+          }
+        } else if (loanPercent >= 81.01 && loanPercent <= 90) {
+          if (loanPeriodYears >= 1 && loanPeriodYears <= 25) {
+            insuranceRate = 0.41;
+          } else if (loanPeriodYears >= 26 && loanPeriodYears <= 30) {
+            insuranceRate = 0.52;
+          }
+        } else if (loanPercent >= 90.01 && loanPercent <= 95) {
+          if (loanPeriodYears >= 1 && loanPeriodYears <= 25) {
+            insuranceRate = 0.67;
+          } else if (loanPeriodYears >= 26 && loanPeriodYears <= 30) {
+            insuranceRate = 0.78;
+          }
+        } else {
+          // Below 70 – not specified. You can adjust if needed.
+          insuranceNote = "Loan % below 70 – rate not specified, treated as NA";
+        }
+      }
+
+      let propertyInsurancePerMonth = null;
+      if (insuranceRate == null) {
+        propertyInsurancePerMonth = null;
+      } else {
+        const propertyInsurancePerAnnumRaw =
+          loanAmount * (insuranceRate / 100.0);
+        const propertyInsurancePerAnnum = truncate2(
+          propertyInsurancePerAnnumRaw
+        );
+        const propertyInsurancePerMonthRaw =
+          propertyInsurancePerAnnum / 12.0;
+        propertyInsurancePerMonth = truncate2(propertyInsurancePerMonthRaw);
+      }
+
+      // Prepare combined strings for Excel columns
+      const purchaseAndDownStr = formatPurchaseAndDown(
+        purchaseValue,
+        downPaymentPercent
+      );
+      const loanPeriodAndAnnuityStr = formatLoanPeriodAndAnnuity(
+        loanPeriodYears,
+        annuityInterestPercent
+      );
+      const loanAndPrincipalStr = formatLoanAndPrincipal(
+        loanAmount,
+        reducedPrincipal
+      );
+      const totalInterestAndInsuranceStr =
+        propertyInsurancePerMonth == null
+          ? formatMoneyWithSpaces(totalInterestWithReduction) + " and NA"
+          : formatTotalInterestAndInsurance(
+              totalInterestWithReduction,
+              propertyInsurancePerMonth
+            );
+
+      return {
+        ok: true,
+        data: {
+          purchaseValue,
+          downPaymentValue,
+          loanAmount,
+          annualPrincipal,
+          monthlyPrincipal,
+          reducedPrincipal,
+          perAnnumInterest,
+          totalInterestWithoutReduction,
+          totalInterestWithReduction,
+          loanPercent,
+          insuranceRate,
+          propertyInsurancePerMonth,
+          purchaseAndDownStr,
+          loanPeriodAndAnnuityStr,
+          loanAndPrincipalStr,
+          totalInterestAndInsuranceStr,
+          insuranceNote,
+        },
+      };
+    }
+
+    // ===== DOM wiring =====
+
+    const form = document.getElementById("loanForm");
+    const summaryPurchaseValue = document.getElementById(
+      "summaryPurchaseValue"
+    );
+    const summaryLoanPeriod = document.getElementById("summaryLoanPeriod");
+    const summaryLoanAmount = document.getElementById("summaryLoanAmount");
+    const summaryTotalInterest = document.getElementById(
+      "summaryTotalInterest"
+    );
+    const statusLabel = document.getElementById("statusLabel");
+    const errorBox = document.getElementById("errorBox");
+    const addRecordBtn = document.getElementById("addRecordBtn");
+    const exportCsvBtn = document.getElementById("exportCsvBtn");
+    const recordsBody = document.getElementById("recordsBody");
+    const clearFormBtn = document.getElementById("clearFormBtn");
+
+    let records = [];
+
+    function getFormInput() {
+      const get = (id) => document.getElementById(id).value.trim();
+
+      return {
+        sampleRecord: get("sampleRecord"),
+        customerRef: get("customerRef"),
+        customerName: get("customerName"),
+        cityState: get("cityState"),
+        totalAmountImage: get("totalAmountImage"),
+        purchaseReductionRate: get("purchaseReductionRate"),
+        downPaymentPercent: get("downPaymentPercent"),
+        loanPeriodYears: get("loanPeriod"),
+        annuityInterestPercent: get("annuityInterest"),
+        monthlyPrincipalReductionPercent: get(
+          "monthlyPrincipalReductionPercent"
+        ),
+        totalInterestReductionPercent: get("totalInterestReductionPercent"),
+        guarantorName: get("guarantorName"),
+        guarantorRef: get("guarantorRef"),
+      };
+    }
+
+    function updatePreview() {
+      const input = getFormInput();
+      const result = calculateAll(input);
+
+      if (!input.totalAmountImage) {
+        summaryPurchaseValue.textContent = "—";
+        summaryLoanPeriod.textContent = "—";
+        summaryLoanAmount.textContent = "—";
+        summaryTotalInterest.textContent = "—";
+        statusLabel.textContent = "Waiting for input…";
+        statusLabel.className = "";
+        errorBox.classList.remove("visible");
+        addRecordBtn.disabled = true;
+        return;
+      }
+
+      if (!result.ok) {
+        summaryPurchaseValue.textContent = "—";
+        summaryLoanPeriod.textContent = "—";
+        summaryLoanAmount.textContent = "—";
+        summaryTotalInterest.textContent = "—";
+        statusLabel.textContent = "Fix input errors before saving.";
+        statusLabel.className = "status-error";
+        errorBox.textContent = result.errors.join(" ");
+        errorBox.classList.add("visible");
+        addRecordBtn.disabled = true;
+        return;
+      }
+
+      errorBox.classList.remove("visible");
+      statusLabel.textContent = "Preview OK. You can add this record.";
+      statusLabel.className = "status-ok";
+      addRecordBtn.disabled = false;
+
+      const d = result.data;
+
+      summaryPurchaseValue.textContent = d.purchaseAndDownStr;
+      summaryLoanPeriod.textContent = d.loanPeriodAndAnnuityStr;
+      summaryLoanAmount.textContent = d.loanAndPrincipalStr;
+      summaryTotalInterest.textContent = d.totalInterestAndInsuranceStr;
+    }
+
+    form.addEventListener("input", () => {
+      updatePreview();
+    });
+
+    clearFormBtn.addEventListener("click", () => {
+      form.reset();
+      updatePreview();
+    });
+
+    addRecordBtn.addEventListener("click", () => {
+      const input = getFormInput();
+      const result = calculateAll(input);
+      if (!result.ok) {
+        errorBox.textContent = result.errors.join(" ");
+        errorBox.classList.add("visible");
+        statusLabel.textContent = "Cannot add record – fix errors.";
+        statusLabel.className = "status-error";
+        return;
+      }
+
+      const d = result.data;
+
+      const record = {
+        sampleRecord: input.sampleRecord,
+        customerRef: input.customerRef,
+        customerName: input.customerName,
+        cityState: input.cityState,
+        purchaseAndDownStr: d.purchaseAndDownStr,
+        loanPeriodAndAnnuityStr: d.loanPeriodAndAnnuityStr,
+        guarantorName: input.guarantorName,
+        guarantorRef: input.guarantorRef,
+        loanAndPrincipalStr: d.loanAndPrincipalStr,
+        totalInterestAndInsuranceStr: d.totalInterestAndInsuranceStr,
+      };
+
+      records.push(record);
+      renderRecordsTable();
+
+      statusLabel.textContent = "Record added. You can continue or export.";
+      statusLabel.className = "status-ok";
+      errorBox.classList.remove("visible");
+      exportCsvBtn.disabled = records.length === 0;
+    });
+
+    function renderRecordsTable() {
+      if (!records.length) {
+        recordsBody.innerHTML =
+          '<tr><td colspan="11" style="text-align:center; color: rgba(98,108,113,0.8); padding:10px;">No records yet. Fill the form and click <strong>Add Record</strong>.</td></tr>';
+        exportCsvBtn.disabled = true;
+        return;
+      }
+
+      const rowsHtml = records
+        .map((r, idx) => {
+          return `
+            <tr>
+              <td>${idx + 1}</td>
+              <td class="mono">${r.sampleRecord}</td>
+              <td class="mono">${r.customerRef}</td>
+              <td>${r.customerName}</td>
+              <td>${r.cityState}</td>
+              <td class="mono">${r.purchaseAndDownStr}</td>
+              <td class="mono">${r.loanPeriodAndAnnuityStr}</td>
+              <td>${r.guarantorName || ""}</td>
+              <td class="mono">${r.guarantorRef || ""}</td>
+              <td class="mono">${r.loanAndPrincipalStr}</td>
+              <td class="mono">${r.totalInterestAndInsuranceStr}</td>
+            </tr>
+          `;
+        })
+        .join("");
+
+      recordsBody.innerHTML = rowsHtml;
+    }
+
+    // Export as CSV (Excel compatible)
+    exportCsvBtn.addEventListener("click", () => {
+      if (!records.length) return;
+
+      const header = [
+        "Sample no, record no.",
+        "Customer reference number",
+        "Customer name",
+        "City, State",
+        "Purchase Value AND Down payment",
+        "Loan Period AND Annuity interest rate",
+        "Guarantor name",
+        "Guarantor reference number",
+        "Loan Amount AND Principal",
+        "Total Interest for Loan Period AND Property Insurance Per Month",
+      ];
+
+      const lines = [];
+      lines.push(header.map(csvEscape).join(","));
+
+      for (const r of records) {
+        const row = [
+          r.sampleRecord,
+          r.customerRef,
+          r.customerName,
+          r.cityState,
+          r.purchaseAndDownStr,
+          r.loanPeriodAndAnnuityStr,
+          r.guarantorName || "",
+          r.guarantorRef || "",
+          r.loanAndPrincipalStr,
+          r.totalInterestAndInsuranceStr,
+        ];
+        lines.push(row.map(csvEscape).join(","));
+      }
+
+      const csvContent = lines.join("\\r\\n");
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      const now = new Date();
+      const ts =
+        now.getFullYear().toString() +
+        String(now.getMonth() + 1).padStart(2, "0") +
+        String(now.getDate()).padStart(2, "0") +
+        "_" +
+        String(now.getHours()).padStart(2, "0") +
+        String(now.getMinutes()).padStart(2, "0");
+      a.download = "loan_records_" + ts + ".csv";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      statusLabel.textContent =
+        "CSV exported. Open it in Excel to see all 10 columns.";
+      statusLabel.className = "status-ok";
+    });
+
+    // Initial preview state
+    updatePreview();
+  </script>
+</body>
+</html>
